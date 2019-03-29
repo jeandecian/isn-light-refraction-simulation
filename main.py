@@ -138,11 +138,12 @@ Main.geometry("1070x715")
 Main.resizable(width=False, height=False)
 
 # on importe les images
-air = PhotoImage(file="air.gif")
-eau = PhotoImage(file="eau.gif")
-ethanol = PhotoImage(file="ethanol.gif")
-verre = PhotoImage(file="verre.gif")
-diamant = PhotoImage(file="diamant.gif")
+imagesPath = "images/"
+air = PhotoImage(file= imagesPath + "air.gif")
+eau = PhotoImage(file= imagesPath + "eau.gif")
+ethanol = PhotoImage(file= imagesPath + "ethanol.gif")
+verre = PhotoImage(file= imagesPath + "verre.gif")
+diamant = PhotoImage(file= imagesPath + "diamant.gif")
 
 # on crée un menu
 menubar = Menu(Main)
