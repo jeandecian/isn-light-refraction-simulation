@@ -1,9 +1,4 @@
-# Projet Noël version 3.3.3
-# Lundi 28 novembre 2016
-# ----------
-# Changelog
-# ----------
-# Rectification de l'indice de réfraction du diamant dans la liste des choix
+# Projet Noel version 3.3.3.19.3.29
 
 from tkinter import *
 import math
@@ -21,22 +16,25 @@ def graphe():
     except:
         saisie.set(0.0)
 
-    a.set("sin(i2) = "+str(value1.get())+"*sin("+str(saisie.get())+")/"+str(value2.get()))
-    b.set("sin(i2) = "+str(value1.get()*math.sin(math.radians(saisie.get()))/value2.get()))
+    sinI2 = value1.get() * math.sin(math.radians(saisie.get())) / value2.get()
 
-    if value1.get()*math.sin(math.radians(saisie.get()))/value2.get() > 1:
+    a.set("sin(i2) = " + str(value1.get()) + "*sin(" + str(saisie.get()) + ")/" + str(value2.get()))
+    b.set("sin(i2) = " + str(sinI2))
+
+    if sinI2 > 1:
         c.set("i2 = ø")
     else:
-        c.set("i2 = "+str(math.degrees(math.asin(value1.get()*math.sin(math.radians(saisie.get()))/value2.get()))))
+        c.set("i2 = " + str(math.degrees(math.asin(sinI2))))
 
     # on trace les angles incident et réfléchi selon la valeur saisie
+    tanSaisie = math.tan(math.radians(saisie.get()))
     if 0 <= saisie.get() < 45:
-        X=250*(1-math.tan(math.radians(saisie.get())))
+        X = 250 * (1 - tanSaisie)
         Graphe.delete(incident, reflechi)
         incident = Graphe.create_line(X,0,250,250, width=3, fill="red")
         reflechi = Graphe.create_line(250,250,500-X,0, width=3, fill="orange")
     elif 45 < saisie.get() <= 90:
-        Y=250*(1-1/math.tan(math.radians(saisie.get())))
+        Y = 250 * (1 - 1/tanSaisie)
         Graphe.delete(incident, reflechi)
         incident = Graphe.create_line(0,Y,250,250, width=3, fill="red")
         reflechi = Graphe.create_line(250,250,500,Y, width=3, fill="orange")
@@ -50,7 +48,7 @@ def graphe():
     try:
         # on calcul la valeur de l'angle réfracté
         if 0 <= saisie.get() <= 90:
-            angle_refracte = round(math.degrees(math.asin(value1.get()*math.sin(math.radians(saisie.get()))/value2.get())),1)
+            angle_refracte = round(math.degrees(math.asin(sinI2)),1)
             resultat.set("Angle réfracté : "+str(angle_refracte)+"°")
         else:
             saisie.set(42.0)
@@ -62,63 +60,64 @@ def graphe():
         angle_refracte = -1
 
     # on trace l'angle réfracté selon le résultat
+    Graphe.delete(refracte)
+    tanAngleRefracte = math.tan(math.radians(angle_refracte))
     if 0 <= angle_refracte < 45:
-        X=250*(1+math.tan(math.radians(angle_refracte)))
-        Graphe.delete(refracte)
+        X = 250 * (1 + tanAngleRefracte)
         refracte = Graphe.create_line(250,250,X,500, width=3, fill="green")
     elif 45 < angle_refracte <= 90:
-        Y=250*(1+1/math.tan(math.radians(angle_refracte)))
-        Graphe.delete(refracte)
+        Y = 250 * (1 + 1/tanAngleRefracte)
         refracte = Graphe.create_line(250,250,500,Y, width=3, fill="green")
     elif angle_refracte == 45:
-        Graphe.delete(refracte)
         refracte = Graphe.create_line(250,250,500,500, width=3, fill="green")
-    else:
-        Graphe.delete(refracte)
 
     # associe une image au milieu 1 selon le milieu choisi
+    Graphe.delete(milieu1, text1)
+    image = air
+    graphText = "AIR"
+    fillColor = "white"
     if value1.get() == 2.42:
-        Graphe.delete(milieu1, text1)
-        milieu1 = Graphe.create_image(0,0, image=diamant, anchor="nw")
-        text1 = Graphe.create_text(10,240, text="MILIEU 1 : DIAMANT", font=("Arial", 20), fill="black", anchor="sw")
+        image = diamant
+        graphText = "DIAMANT"
+        fillColor = "black"
     elif value1.get() == 1.50:
-        Graphe.delete(milieu1, text1)
-        milieu1 = Graphe.create_image(0,0, image=verre, anchor="nw")
-        text1 = Graphe.create_text(10,240, text="MILIEU 1 : PLEXIGLAS/VERRE", font=("Arial", 20), fill="black", anchor="sw")
+        image = verre
+        graphText = "PLEXIGLAS/VERRE"
+        fillColor = "black"
     elif value1.get() == 1.36:
-        Graphe.delete(milieu1, text1)
-        milieu1 = Graphe.create_image(0,0, image=ethanol, anchor="nw")
-        text1 = Graphe.create_text(10,240, text="MILIEU 1 : ETHANOL", font=("Arial", 20), fill="white", anchor="sw")
+        image = ethanol
+        graphText = "ETHANOL"
     elif value1.get() == 1.33:
-        Graphe.delete(milieu1, text1)
-        milieu1 = Graphe.create_image(0,0, image=eau, anchor="nw")
-        text1 = Graphe.create_text(10,240, text="MILIEU 1 : EAU", font=("Arial", 20), fill="black", anchor="sw")
-    else:
-        Graphe.delete(milieu1, text1)
-        milieu1 = Graphe.create_image(0,0, image=air, anchor="nw")
-        text1 = Graphe.create_text(10,240, text="MILIEU 1 : AIR", font=("Arial", 20), fill="white", anchor="sw")
+        image = eau
+        graphText = "EAU"
+        fillColor = "black"
+
+    milieu1 = Graphe.create_image(0,0, image=image, anchor="nw")
+    text1 = Graphe.create_text(10,240, text="MILIEU 1 : "+graphText, font=("Arial", 20), fill=fillColor, anchor="sw")
 
     # associe une image au milieu 2 selon le milieu choisi
+    Graphe.delete(milieu2, text2)
+    image = air
+    graphText = "AIR"
+    fillColor = "white"
     if value2.get() == 2.42:
-        Graphe.delete(milieu2, text2)
-        milieu2 = Graphe.create_image(0,250, image=diamant, anchor="nw")
-        text2 = Graphe.create_text(10,490, text="MILIEU 2 : DIAMANT", font=("Arial", 20), fill="black", anchor="sw")
+        image = diamant
+        graphText = "DIAMANT"
+        fillColor = "black"
     elif value2.get() == 1.50:
-        Graphe.delete(milieu2, text2)
-        milieu2 = Graphe.create_image(0,250, image=verre, anchor="nw")
-        text2 = Graphe.create_text(10,490, text="MILIEU 2 : PLEXIGLAS/VERRE", font=("Arial", 20), fill="black", anchor="sw")
+        image = verre
+        graphText = "PLEXIGLAS/VERRE"
+        fillColor = "black"
     elif value2.get() == 1.36:
-        Graphe.delete(milieu2, text2)
-        milieu2 = Graphe.create_image(0,250, image=ethanol, anchor="nw")
-        text2 = Graphe.create_text(10,490, text="MILIEU 2 : ETHANOL", font=("Arial", 20), fill="white", anchor="sw")
+        image = ethanol
+        graphText = "ETHANOL"
     elif value2.get() == 1.33:
-        Graphe.delete(milieu2, text2)
-        milieu2 = Graphe.create_image(0,250, image=eau, anchor="nw")
-        text2 = Graphe.create_text(10,490, text="MILIEU 2 : EAU", font=("Arial", 20), fill="black", anchor="sw")
-    else:
-        Graphe.delete(milieu2, text2)
-        milieu2 = Graphe.create_image(0,250, image=air, anchor="nw")
-        text2 = Graphe.create_text(10,490, text="MILIEU 2 : AIR", font=("Arial", 20), fill="white", anchor="sw")
+        image = eau
+        graphText = "EAU"
+        fillColor = "black"
+
+    milieu2 = Graphe.create_image(0,250, image=image, anchor="nw")
+    text2 = Graphe.create_text(10,490, text="MILIEU 2 : "+graphText, font=("Arial", 20), fill=fillColor, anchor="sw")
 
     Graphe.tag_lower(milieu1)
     Graphe.tag_lower(milieu2)
@@ -134,7 +133,7 @@ def update(self):
 
 # on crée une fenetre de taille non-modifiable
 Main = Tk()
-Main.title("Phénomène de diffraction v.3.3.2")
+Main.title("Phénomène de réfraction de la lumière")
 Main.geometry("1070x715")
 Main.resizable(width=False, height=False)
 
