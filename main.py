@@ -1,7 +1,30 @@
-# Projet Noel version 3.3.3.19.3.29
+# Projet Noel version 3.3.3.19.5.23
 
 from tkinter import *
 import math
+
+def getEnvironmentValues(value):
+    image = air
+    graphText = "AIR"
+    fillColor = "white"
+    
+    if value == 2.42:
+        image = diamant
+        graphText = "DIAMANT"
+        fillColor = "black"
+    elif value == 1.50:
+        image = verre
+        graphText = "PLEXIGLAS/VERRE"
+        fillColor = "black"
+    elif value == 1.36:
+        image = ethanol
+        graphText = "ETHANOL"
+    elif value == 1.33:
+        image = eau
+        graphText = "EAU"
+        fillColor = "black"
+
+    return image, graphText, fillColor
 
 def graphe():
     # fonction qui permet de calculer la valeur de l'angle réfracté et de tracer les angles réfracté, incident et réfléchi
@@ -73,48 +96,14 @@ def graphe():
 
     # associe une image au milieu 1 selon le milieu choisi
     Graphe.delete(milieu1, text1)
-    image = air
-    graphText = "AIR"
-    fillColor = "white"
-    if value1.get() == 2.42:
-        image = diamant
-        graphText = "DIAMANT"
-        fillColor = "black"
-    elif value1.get() == 1.50:
-        image = verre
-        graphText = "PLEXIGLAS/VERRE"
-        fillColor = "black"
-    elif value1.get() == 1.36:
-        image = ethanol
-        graphText = "ETHANOL"
-    elif value1.get() == 1.33:
-        image = eau
-        graphText = "EAU"
-        fillColor = "black"
+    image, graphText, fillColor = getEnvironmentValues(value1.get())
 
     milieu1 = Graphe.create_image(0,0, image=image, anchor="nw")
     text1 = Graphe.create_text(10,240, text="MILIEU 1 : "+graphText, font=("Arial", 20), fill=fillColor, anchor="sw")
 
     # associe une image au milieu 2 selon le milieu choisi
     Graphe.delete(milieu2, text2)
-    image = air
-    graphText = "AIR"
-    fillColor = "white"
-    if value2.get() == 2.42:
-        image = diamant
-        graphText = "DIAMANT"
-        fillColor = "black"
-    elif value2.get() == 1.50:
-        image = verre
-        graphText = "PLEXIGLAS/VERRE"
-        fillColor = "black"
-    elif value2.get() == 1.36:
-        image = ethanol
-        graphText = "ETHANOL"
-    elif value2.get() == 1.33:
-        image = eau
-        graphText = "EAU"
-        fillColor = "black"
+    image, graphText, fillColor = getEnvironmentValues(value2.get())
 
     milieu2 = Graphe.create_image(0,250, image=image, anchor="nw")
     text2 = Graphe.create_text(10,490, text="MILIEU 2 : "+graphText, font=("Arial", 20), fill=fillColor, anchor="sw")
